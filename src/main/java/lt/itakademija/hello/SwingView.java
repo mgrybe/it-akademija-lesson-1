@@ -81,7 +81,7 @@ public class SwingView implements View, Initializable, Destroyable {
 	}
 	
 	private static final class NamesDisplayingPanel extends JPanel {
-		private String displayName;
+		private String displayName = "Anonymous";
 		
 		void setDisplayName(String name) {
 			this.displayName = name;

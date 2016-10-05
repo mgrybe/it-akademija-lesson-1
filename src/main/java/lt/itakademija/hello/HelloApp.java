@@ -3,10 +3,7 @@ package lt.itakademija.hello;
 public class HelloApp {
 
 	public static void main(String[] args) {
-		View view = new SwingView();
-		NamesRepository namesRepository = new InMemoryNamesRepository();
-		
-		HelloEngine engine = new HelloEngine(view, namesRepository);
+		HelloEngine engine = new HelloEngine(new SwingView(), new InMemoryNamesRepository());
 		engine.start();
 	}
 
