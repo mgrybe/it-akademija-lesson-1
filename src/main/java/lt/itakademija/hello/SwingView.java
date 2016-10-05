@@ -18,30 +18,23 @@ import java.util.concurrent.Semaphore;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import lt.itakademija.hello.util.Blocker;
+
 public class SwingView implements View, Initializable, Destroyable {
 	
 	private JFrame frame;
 	
 	private NamesDisplayingPanel nameDisplay;
 	
-	private Semaphore semaphore = new Semaphore(1);
+	private Blocker blocker = new Blocker();
 
 	@Override
 	public void showName(String name) {
 		this.nameDisplay.setDisplayName(name);
 		this.nameDisplay.repaint();
-		
-		acquire();
+		blocker.block();
 	}
 	
-	private void acquire() {
-		try {
-			this.semaphore.acquire(1);
-		} catch (InterruptedException e) {
-			throw new RuntimeException(e);
-		}
-	}
-
 	@Override
 	public void init() {
 		this.frame = new JFrame();
@@ -53,13 +46,11 @@ public class SwingView implements View, Initializable, Destroyable {
 		this.frame.setSize(500, 500);
 		this.frame.setVisible(true);
 		
-		acquire();
-		
 		this.frame.addMouseListener(new MouseListener() {
 
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				SwingView.this.semaphore.release();
+				SwingView.this.blocker.unblock();
 			}
 
 			@Override
